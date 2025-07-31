@@ -1,9 +1,18 @@
 import React from "react";
+import { useCart } from "../context/CartProvider";
+import toast from "react-hot-toast";
 
 function Cards({ item }) {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(item);
+    toast.success(`${item.name} added to cart!`);
+  };
+
   return (
     <>
-      <div className ="mt-4 my-3 p-3">
+      <div className="mt-4 my-3 p-3">
         <div className="card w-92 bg-base-100 shadow-xl hover:scale-105 duration-200 dark:bg-slate-900 dark:text-white dark:border">
           <figure>
             <img src={item.image} alt="Shoes" />
@@ -16,8 +25,16 @@ function Cards({ item }) {
             <p>{item.title}</p>
             <div className="card-actions justify-between">
               <div className="badge badge-outline">${item.price}</div>
-              <div className=" cursor-pointer px-2 py-1 rounded-full border-[2px] hover:bg-pink-500 hover:text-white duration-200">
-                Buy Now
+              <div className="flex gap-2">
+                <div className=" cursor-pointer px-2 py-1 rounded-full border-[2px] hover:bg-pink-500 hover:text-white duration-200">
+                  Buy Now
+                </div>
+                <button
+                  onClick={handleAddToCart}
+                  className="cursor-pointer px-2 py-1 rounded-full border-[2px] border-green-500 hover:bg-green-500 hover:text-white duration-200"
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           </div>

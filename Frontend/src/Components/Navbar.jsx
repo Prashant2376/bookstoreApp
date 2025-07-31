@@ -1,8 +1,15 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Login from "./Login";
+import Logout from "./Logout";
+import About from "./About";
+import { useAuth } from "../context/AuthProvider";
+import { useCart } from "../context/CartProvider";
+import { Link } from "react-router-dom";
 
 function Navbar() {
+  const [authUser] = useAuth();
+  const { getCartCount } = useCart();
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
@@ -39,16 +46,21 @@ function Navbar() {
   const navItems = (
     <>
       <li>
-        <a href="/">Home</a>
+        <Link to="/">Home</Link>
       </li>
       <li>
-        <a href="/course">Course</a>
+        <Link to="/course">Course</Link>
       </li>
       <li>
-        <a>Contact</a>
+        <Link to="/contact">Contact</Link>
       </li>
       <li>
-        <a>About</a>
+        <a
+          onClick={() => document.getElementById("about_modal").showModal()}
+          className="cursor-pointer"
+        >
+          About
+        </a>
       </li>
     </>
   );
@@ -121,6 +133,31 @@ function Navbar() {
               </label>
             </div>
 
+            {/* Cart Icon */}
+            <Link to="/cart" className="relative">
+              <div className="indicator">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
+                  />
+                </svg>
+                {getCartCount() > 0 && (
+                  <span className="badge badge-sm indicator-item bg-pink-500 text-white">
+                    {getCartCount()}
+                  </span>
+                )}
+              </div>
+            </Link>
+
             <label className="swap swap-rotate">
               {/* this hidden checkbox controls the state */}
               <input
@@ -150,20 +187,25 @@ function Navbar() {
               </svg>
             </label>
 
-            <div className="">
-              <a
-                className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer"
-                onClick={() =>
-                  document.getElementById("my_modal_3").showModal()
-                }
-              >
-                Login
-              </a>
-              <Login />
-            </div>
+            {authUser ? (
+              <Logout />
+            ) : (
+              <div className="">
+                <a
+                  className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer"
+                  onClick={() =>
+                    document.getElementById("my_modal_3").showModal()
+                  }
+                >
+                  Login
+                </a>
+                <Login />
+              </div>
+            )}
           </div>
         </div>
       </div>
+      <About />
     </>
   );
 }
