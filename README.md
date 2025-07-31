@@ -5,7 +5,7 @@ A full-stack Bookstore web application built with the MERN stack (MongoDB, Expre
 ## Features
 
 - User authentication (signup, login)
-- Books ca be added to cart as well
+- Books can be added to cart as well
 - Browse and view books
 - Responsive UI with dark/light mode
 - Contact form and About section
